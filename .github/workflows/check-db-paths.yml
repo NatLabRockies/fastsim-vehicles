@@ -1,0 +1,36 @@
+name: Check YAML db_path consistency
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-db-path:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate db_path matches file path for all models in v1/fastsim-3
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          failed=0
+
+          while IFS= read -r -d '' file; do
+            expected_path="${file%.*}"
+            expected_line="db_path: ${expected_path}"
+
+            if ! grep -Fxq "$expected_line" "$file"; then
+              echo "::error file=${file}::Missing or incorrect db_path. Expected exact line: ${expected_line}"
+              failed=1
+            fi
+          done < <(find v1/fastsim-3 -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+
+          if [[ "$failed" -ne 0 ]]; then
+            echo "db_path validation failed"
+            exit 1
+          fi
+
+          echo "All YAML files have the expected db_path line."
