@@ -33,4 +33,4 @@ jobs:
             exit 1
           fi
 
-          echo "All YAML files have the expected db_path line."
+          echo "Success: all YAML files in v1/fastsim-3 have the expected db_path line"
