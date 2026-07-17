@@ -1,10 +1,11 @@
 ---
 name: 2012 Ford Fusion
 min_fastsim_version: 3.1.0
+db_path: v1/fastsim-3/conv/ford/fusion/2012/base/v1
 doc: ~
 year: "2012"
-make: "Ford"
-model: "Fusion"
+make: Ford
+model: Fusion
 pt_type:
   Conv:
     fs:
