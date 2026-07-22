@@ -1,5 +1,5 @@
 # FASTSim Vehicle Database
-This repository houses the publicly available collection of vehicle models for NLR's FASTSim on-road vehicle powertrain simulation software. Additional information on FASTSim can be found at the [FASTSim GitHub repository](https://github.com/NatLabRockies/fastsim) or on the [NLR.gov website](https://www.nlr.gov/transportation/fastsim).
+This repository houses the publicly available collection of vehicle models for NLR's FASTSim on-road vehicle powertrain simulation software. Additional information on FASTSim can be found at the [FASTSim GitHub repository](https://github.com/NatLabRockies/fastsim), the [FASTSim documentation site](https://natlabrockies.github.io/fastsim/), or on the [NLR.gov FASTSim homepage](https://www.nlr.gov/transportation/fastsim).
 
 ## Database Organizational Schema (v1)
 
