@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  check-db-path:
+  check-db-paths:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -55,14 +55,15 @@ jobs:
           environments: build
 
       - name: Run from_db for all vehicles in v1/fastsim-3
-        shell: pixi --manifest-path fastsim/pyproject.toml run -e build bash -e {0}
+        working-directory: fastsim
+        shell: pixi run -e build bash -e {0}
         run: |
           python - <<'PYEOF'
           import fastsim
           import sys
           from pathlib import Path
 
-          db_root = Path(".")
+          db_root = Path("..")
           failed = []
 
           for yaml_file in sorted((db_root / "v1/fastsim-3").rglob("*.yaml")):
