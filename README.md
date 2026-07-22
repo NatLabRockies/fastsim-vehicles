@@ -12,8 +12,8 @@ This repository houses the publicly available collection of vehicle models for N
 | Model | Vehicle model name and any applicable trim information. | `camry-xle` |
 | Year | Model year or year range. | `2015` |
 | Variant | Description of active modeling feature set. | `thermal` |
-| Revision | Model revision number for updates and corrections. | `v1` |
+| Revision | Model revision number for updates and corrections. | `r1` |
 
 Example full filepath:
 
-`v1/fastsim-3/hev/toyota/camry-xle/2015/thermal/v1.yaml`
+`v1/fastsim-3/hev/toyota/camry-xle/2015/thermal/r1.yaml`
