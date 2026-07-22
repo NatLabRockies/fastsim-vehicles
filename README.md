@@ -7,7 +7,7 @@ This repository houses the publicly available collection of vehicle models for N
 | --- | --- | --- |
 | Schema version | Describes the format of subsequent organizational levels. | `v1` |
 | FASTSim version | Major FASTSim version. | `fastsim-3` |
-| Powertrain | Powertrain type (e.g. `conv`/`hev`/`phev`/`bev`/`fcev`) | `hev` |
+| Powertrain | Powertrain type (e.g. `conv`/`hev`/`phev`/`bev`/`fcev`) | `conv` |
 | Make | Vehicle make/manufacturer name. | `ford` |
 | Model | Vehicle model name and any applicable trim information. | `fusion` |
 | Year | Model year or year range. | `2012` |
