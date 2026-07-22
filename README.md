@@ -16,4 +16,4 @@ This repository houses the publicly available collection of vehicle models for N
 
 Example full filepath:
 
-`v1/fastsim-3/conv/ford/fusion/2012/base/r1`
+`v1/fastsim-3/conv/ford/fusion/2012/base/r1.yaml`
