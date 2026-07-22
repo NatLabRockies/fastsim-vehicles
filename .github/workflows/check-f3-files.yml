@@ -1,0 +1,82 @@
+name: Check fastsim-3 vehicle files
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-db-path:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate db_path matches file path for all models in v1/fastsim-3
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          failed=0
+
+          while IFS= read -r -d '' file; do
+            expected_path="${file%.*}"
+            expected_line="db_path: ${expected_path}"
+
+            if ! grep -Fxq "$expected_line" "$file"; then
+              echo "::error file=${file}::Missing or incorrect db_path. Expected exact line: ${expected_line}"
+              failed=1
+            fi
+          done < <(find v1/fastsim-3 -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+
+          if [[ "$failed" -ne 0 ]]; then
+            echo "db_path validation failed"
+            exit 1
+          fi
+
+          echo "Success: all YAML files in v1/fastsim-3 have the expected db_path line"
+
+  test-from-db:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fastsim-vehicles
+        uses: actions/checkout@v4
+
+      - name: Checkout fastsim
+        uses: actions/checkout@v4
+        with:
+          repository: NatLabRockies/fastsim
+          ref: f3/vehicle-repo-changes
+          path: fastsim
+
+      - name: Set up Pixi (fastsim build environment)
+        uses: prefix-dev/setup-pixi@v0.8.14
+        with:
+          manifest-path: fastsim/pyproject.toml
+          environments: build
+
+      - name: Run from_db for all vehicles in v1/fastsim-3
+        shell: pixi --manifest-path fastsim/pyproject.toml run -e build bash -e {0}
+        run: |
+          python - <<'PYEOF'
+          import fastsim
+          import sys
+          from pathlib import Path
+
+          db_root = Path(".")
+          failed = []
+
+          for yaml_file in sorted((db_root / "v1/fastsim-3").rglob("*.yaml")):
+              db_path = str(yaml_file.with_suffix("").relative_to(db_root))
+              try:
+                  fastsim.Vehicle.from_db(db_root, path=db_path)
+                  print(f"OK: {db_path}")
+              except Exception as e:
+                  print(f"FAILED: {db_path}: {e}", file=sys.stderr)
+                  failed.append(db_path)
+
+          if failed:
+              print(f"\n{len(failed)} vehicle(s) failed to load", file=sys.stderr)
+              sys.exit(1)
+
+          print("\nAll vehicles loaded successfully")
+          PYEOF
