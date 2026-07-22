@@ -8,12 +8,12 @@ This repository houses the publicly available collection of vehicle models for N
 | Schema version | Describes the format of subsequent organizational levels. | `v1` |
 | FASTSim version | Major FASTSim version. | `fastsim-3` |
 | Powertrain | Powertrain type (e.g. `conv`/`hev`/`phev`/`bev`/`fcev`) | `hev` |
-| Make | Vehicle make/manufacturer name. | `toyota` |
-| Model | Vehicle model name and any applicable trim information. | `camry-xle` |
-| Year | Model year or year range. | `2015` |
-| Variant | Description of active modeling feature set. | `thermal` |
+| Make | Vehicle make/manufacturer name. | `ford` |
+| Model | Vehicle model name and any applicable trim information. | `fusion` |
+| Year | Model year or year range. | `2012` |
+| Variant | Description of active modeling feature set. | `base` |
 | Revision | Model revision number for updates and corrections. | `r1` |
 
 Example full filepath:
 
-`v1/fastsim-3/hev/toyota/camry-xle/2015/thermal/r1.yaml`
+`v1/fastsim-3/conv/ford/fusion/2012/base/r1`
