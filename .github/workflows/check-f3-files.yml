@@ -45,7 +45,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: NatLabRockies/fastsim
-          ref: f3/vehicle-repo-changes
+          ref: fastsim-3
           path: fastsim
 
       - name: Set up Pixi (fastsim build environment)
