@@ -5,7 +5,7 @@ on:
 
 jobs:
   check-db-paths:
-    name: Validate db_path fields match file paths
+    name: Verify db_path fields match file paths
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
