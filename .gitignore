@@ -3,3 +3,7 @@
 .DS_Store
 
 scripts/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
