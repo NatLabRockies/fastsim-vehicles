@@ -42,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Rebuild v1/vehicles.jsonl and verify it matches committed index
+      - name: Rebuild v1/vehicles.jsonl
         run: cargo run --
         working-directory: tools/build-index
 
