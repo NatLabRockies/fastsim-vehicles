@@ -4,6 +4,12 @@
 
 scripts/
 
-# pixi environments
+# pixi
 .pixi/*
 !.pixi/config.toml
+pixi.toml
+pixi.lock
+.gitattributes
+
+# direnv
+.envrc
