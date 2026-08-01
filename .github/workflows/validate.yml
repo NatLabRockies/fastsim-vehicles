@@ -1,10 +1,11 @@
-name: Check fastsim-3 vehicle files
+name: Database validation checks
 
 on:
   push:
 
 jobs:
   check-db-paths:
+    name: Validate db_path fields match file paths
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -35,6 +36,7 @@ jobs:
           echo "Success: all YAML files in v1/fastsim-3 have the expected db_path line"
 
   check-index:
+    name: Verify vehicles.jsonl index is up to date
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -52,6 +54,7 @@ jobs:
           }
 
   test-from-db:
+    name: Test FASTSim Vehicle.from_db for all vehicles
     runs-on: ubuntu-latest
     steps:
       - name: Checkout fastsim-vehicles
