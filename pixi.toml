@@ -1,5 +1,5 @@
 [workspace]
-authors = ["Kyle Carow <kylecarow@gmail.com>"]
+authors = ["Kyle Carow <Kyle.Carow@nlr.gov>"]
 channels = ["conda-forge"]
 name = "fastsim-vehicles"
 platforms = ["osx-arm64"]
