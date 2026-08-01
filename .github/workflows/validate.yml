@@ -42,20 +42,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout fastsim
-        uses: actions/checkout@v4
-        with:
-          repository: NatLabRockies/fastsim
-          ref: fastsim-3
-          path: fastsim
+      - name: Install build-index
+        run: cargo install fastsim-schema --bin build-index
 
       - name: Rebuild v1/vehicles.jsonl
-        run: cargo run --manifest-path fastsim/fastsim-schema/Cargo.toml -- .
+        run: build-index .
 
       - name: Fail if index is out of date
         run: |
           git diff --exit-code v1/vehicles.jsonl || {
-            echo "::error file=v1/vehicles.jsonl::Index is out of date. Run 'pixi run build-index' and commit the result."
+            echo "::error file=v1/vehicles.jsonl::Index is out of date. Run the fastsim-schema build-index binary against the repo root and commit the result."
             exit 1
           }
 

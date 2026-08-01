@@ -35,15 +35,31 @@ Alternatively, you can supply path segments as individual fields, which is usefu
 
 ```python
 fastsim.Vehicle.from_db(
-    fastsim_version=3,       # optional, defaults to installed FASTSim major version
-    powertrain="conv",       # required: "conv", "hev", "phev", "bev"
-    make="ford",             # required
-    model="fusion",          # required
-    year="2012",             # required (string; supports ranges like "2020-2023")
-    variant="base",          # optional, default "base"
-    revision=1,              # required (int or "r1"/"R1" string)
-    extension="yaml",        # optional, default "yaml"
+    fastsim_version=3,  # optional, defaults to installed FASTSim major version
+    powertrain="conv",  # required: "conv", "hev", "phev", "bev"
+    make="ford",  # required
+    model="fusion",  # required
+    year="2012",  # required (string; supports ranges like "2020-2023")
+    variant="base",  # optional, default "base"
+    revision=1,  # required (int or "r1"/"R1" string)
+    extension="yaml",  # optional, default "yaml"
 )
 ```
 
 For more information on `Vehicle.from_db` and how to load from alternate databases, see the Python docstring or the [relevant page of the FASTSim documentation](https://natlabrockies.github.io/fastsim/vehicle-databases).
+
+## Developers
+
+### Rebuilding the `vehicles.jsonl` index
+
+Install the index builder binary:
+
+```bash
+cargo install fastsim-schema --bin build-index
+```
+
+Run:
+
+```bash
+build-index .
+```
