@@ -122,6 +122,7 @@ fn main() -> anyhow::Result<()> {
                     .parse::<fastsim_schema::VehicleSchemaV1>()
                     .is_err()
                 {
+                    println!("Skipping unparsable file: {:?}", schema_file_path_str);
                     continue;
                 }
                 // Create index entry
