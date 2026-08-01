@@ -2,7 +2,7 @@
 authors = ["Kyle Carow <Kyle.Carow@nlr.gov>"]
 channels = ["conda-forge"]
 name = "fastsim-vehicles"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
