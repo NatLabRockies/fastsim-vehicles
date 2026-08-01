@@ -9,3 +9,4 @@ version = "0.1.0"
 build-index = { cmd = "cargo run --", cwd = "tools/build-index" }
 
 [dependencies]
+rust = ">=1.85.1"
