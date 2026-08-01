@@ -116,7 +116,7 @@ checksum = "1d07550c9036bf2ae0c684c4297d503f838287c83c53686d05370d0e139ae570"
 [[package]]
 name = "fastsim-schema"
 version = "0.1.0"
-source = "git+https://github.com/NatLabRockies/fastsim.git?branch=schema-crate#dee16f006ab26c5dfc92277bdefa13555a7ef9f0"
+source = "git+https://github.com/NatLabRockies/fastsim.git?branch=schema-crate#e69a653b6352082943f68b9a5291776a6619bdfa"
 dependencies = [
  "serde",
  "serde_json",
