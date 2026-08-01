@@ -20,6 +20,7 @@ struct Cli {
     #[arg(short, long, value_name = "SCHEMA", default_value_t = DEFAULT_SCHEMA_VERSION)]
     schema: u32,
 
+    /// Output index file path
     #[arg(
         short,
         long = "output",
