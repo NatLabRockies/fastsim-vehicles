@@ -2,6 +2,8 @@ name: Database validation checks
 
 on:
   push:
+    branches: ["fastsim-3"]
+  pull_request:
 
 jobs:
   check-db-paths:
