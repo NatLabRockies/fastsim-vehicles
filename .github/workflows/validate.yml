@@ -2,7 +2,7 @@ name: Database validation checks
 
 on:
   push:
-    branches: ["fastsim-3"]
+    branches: ["main"]
   pull_request:
 
 jobs:
