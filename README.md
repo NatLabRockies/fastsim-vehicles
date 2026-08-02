@@ -55,7 +55,7 @@ For more information on `Vehicle.from_db` and how to load from alternate databas
 Install the index builder binary:
 
 ```bash
-cargo install fastsim-schema --bin build-index
+cargo install fastsim-schema --features cli --bin build-index
 ```
 
 Run:
