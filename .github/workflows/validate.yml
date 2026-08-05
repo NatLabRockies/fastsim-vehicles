@@ -45,8 +45,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install build-index
-        run: cargo install --git https://github.com/NatLabRockies/fastsim fastsim-schema --features cli --bin build-index
-        # run: cargo install fastsim-schema --features cli --bin build-index
+        run: cargo install fastsim-schema --features cli --bin build-index
 
       - name: Rebuild v1/vehicles.jsonl
         run: build-index .
