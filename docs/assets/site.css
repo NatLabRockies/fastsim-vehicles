@@ -1,0 +1,20 @@
+/* Increase the site header logo size in the MyST book theme. */
+img[src*="edit-nlr-logo-color-horizontal-png-v2"],
+img[src*="edit-nlr-logo"] {
+  height: 55px !important;
+  max-height: 55px !important;
+  width: auto !important;
+}
+
+/* Space below the embedded vehicle-search widget, and a taller viewport so it
+   needs less internal scrolling. MyST wraps iframes in a container that sizes
+   itself via a `padding-bottom` percentage (for a fixed aspect ratio) and
+   regenerates the iframe's own style attribute (position:absolute, inset 0,
+   100% width/height), so neither the aspect ratio nor the margin can be set
+   via the iframe's `style` attribute in the source Markdown - both have to be
+   overridden here on the wrapper div instead. */
+div:has(> iframe[src="/search.html"]) {
+  height: 80vh !important;
+  padding-bottom: 0 !important;
+  margin-bottom: 3rem;
+}

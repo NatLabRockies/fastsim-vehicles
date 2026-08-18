@@ -3,3 +3,10 @@
 .DS_Store
 
 scripts/
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+# mystmd build output
+docs/_build

@@ -1,0 +1,20 @@
+# See docs at: https://mystmd.org/guide/frontmatter
+version: 1
+project:
+  title: FASTSim Vehicle Database
+  github: https://github.com/NatLabRockies/fastsim-vehicles
+  static_files:
+    - static/pkg
+    - static/search.html
+  toc:
+    - file: content/intro.md
+    - url: https://github.com/NatLabRockies/fastsim
+      title: FASTSim GitHub Repository
+    - url: https://natlabrockies.github.io/fastsim/
+      title: FASTSim Documentation
+site:
+  template: book-theme
+  options:
+    logo: assets/edit-nlr-logo-color-horizontal-png-v2.png
+    favicon: assets/nlr.ico
+    style: assets/site.css

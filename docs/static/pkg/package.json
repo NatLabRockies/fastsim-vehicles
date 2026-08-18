@@ -1,0 +1,25 @@
+{
+  "name": "fastsim-schema",
+  "type": "module",
+  "collaborators": [
+    "NREL/BEST/CIMS/TETA Group <fastsim@nlr.gov>"
+  ],
+  "description": "Vehicle database schema for the fastsim-vehicles repository",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NatLabRockies/fastsim"
+  },
+  "files": [
+    "fastsim_schema_bg.wasm",
+    "fastsim_schema.js",
+    "fastsim_schema.d.ts"
+  ],
+  "main": "fastsim_schema.js",
+  "homepage": "https://www.nlr.gov/transportation/fastsim",
+  "types": "fastsim_schema.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

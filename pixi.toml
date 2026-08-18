@@ -1,0 +1,17 @@
+[workspace]
+authors = ["Kyle Carow <kylecarow@gmail.com>"]
+channels = ["conda-forge"]
+name = "fastsim-vehicles"
+platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
+version = "0.1.0"
+
+[dependencies]
+nodejs = "26.4.*"
+python = ">=3.10,<3.16"
+
+[pypi-dependencies]
+jupyter-book = ">=2.0.0"
+
+[tasks]
+docs = { cmd = "jupyter book start", cwd = "docs" }
+build-docs = { cmd = "jupyter book build --strict --html", cwd = "docs" }
