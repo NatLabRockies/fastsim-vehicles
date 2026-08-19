@@ -1,80 +1,110 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<title>Vehicle Search</title>
-<style>
-  :root {
-    color-scheme: light dark;
-    --fg: #1a1a1a;
-    --bg: #ffffff;
-    --border: #d0d0d0;
-    --muted: #666666;
-    --accent: #1a56db;
-  }
-  @media (prefers-color-scheme: dark) {
+  <meta charset="utf-8" />
+  <title>Vehicle Search</title>
+  <style>
     :root {
-      --fg: #e8e8e8;
-      --bg: #1e1e1e;
-      --border: #3a3a3a;
-      --muted: #a0a0a0;
-      --accent: #6ea8fe;
+      color-scheme: light dark;
+      --fg: #1a1a1a;
+      --bg: #ffffff;
+      --border: #d0d0d0;
+      --muted: #666666;
+      --accent: #1a56db;
     }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    padding: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    color: var(--fg);
-    background: var(--bg);
-  }
-  form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  label {
-    display: flex;
-    flex-direction: column;
-    font-size: 0.75rem;
-    color: var(--muted);
-    gap: 0.25rem;
-  }
-  input, select {
-    font: inherit;
-    padding: 0.35rem 0.5rem;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: var(--bg);
-    color: var(--fg);
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-  }
-  th, td {
-    text-align: left;
-    padding: 0.4rem 0.5rem;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-  }
-  th { color: var(--muted); font-weight: 600; }
-  a.download {
-    color: var(--accent);
-    text-decoration: none;
-  }
-  a.download:hover { text-decoration: underline; }
-  #status { color: var(--muted); font-size: 0.875rem; margin-bottom: 0.75rem; }
-  #results-wrap { overflow-x: auto; }
-</style>
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fg: #e8e8e8;
+        --bg: #1e1e1e;
+        --border: #3a3a3a;
+        --muted: #a0a0a0;
+        --accent: #6ea8fe;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.75rem;
+      color: var(--muted);
+      gap: 0.25rem;
+    }
+
+    input,
+    select {
+      font: inherit;
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    a.download {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a.download:hover {
+      text-decoration: underline;
+    }
+
+    #status {
+      color: var(--muted);
+      font-size: 0.875rem;
+      margin-bottom: 0.75rem;
+    }
+
+    #results-wrap {
+      overflow-x: auto;
+    }
+  </style>
 </head>
+
 <body>
   <form id="query-form">
     <label>FASTSim version
-      <input type="number" id="fastsim_version" placeholder="e.g. 3" min="2" max="3" />
+      <input type="number" id="fastsim_version" min="2" max="3" value="3" />
     </label>
     <label>Powertrain
       <select id="powertrain">
@@ -118,37 +148,37 @@
     </table>
   </div>
 
-<script type="module">
-  import init, { parse_vehicles_jsonl, search_entries, build_download_url } from './pkg/fastsim_schema.js';
+  <script type="module">
+    import init, { parse_vehicles_jsonl, search_entries, build_download_url } from './pkg/fastsim_schema.js';
 
-  const VEHICLES_JSONL_URL =
-    'https://raw.githubusercontent.com/NatLabRockies/fastsim-vehicles/main/v1/vehicles.jsonl';
+    const VEHICLES_JSONL_URL =
+      'https://raw.githubusercontent.com/NatLabRockies/fastsim-vehicles/main/v1/vehicles.jsonl';
 
-  const statusEl = document.getElementById('status');
-  const resultsBody = document.getElementById('results-body');
-  const form = document.getElementById('query-form');
-  const fields = ['fastsim_version', 'powertrain', 'make', 'model', 'year', 'variant'];
+    const statusEl = document.getElementById('status');
+    const resultsBody = document.getElementById('results-body');
+    const form = document.getElementById('query-form');
+    const fields = ['fastsim_version', 'powertrain', 'make', 'model', 'year', 'variant'];
 
-  let entries = [];
+    let entries = [];
 
-  function currentQuery() {
-    const query = {};
-    for (const field of fields) {
-      const value = document.getElementById(field).value.trim();
-      if (!value) continue;
-      query[field] = field === 'fastsim_version' ? parseInt(value, 10) : value;
+    function currentQuery() {
+      const query = {};
+      for (const field of fields) {
+        const value = document.getElementById(field).value.trim();
+        if (!value) continue;
+        query[field] = field === 'fastsim_version' ? parseInt(value, 10) : value;
+      }
+      return query;
     }
-    return query;
-  }
 
-  function renderResults(results) {
-    resultsBody.replaceChildren();
-    for (const entry of results) {
-      const row = document.createElement('tr');
-      const extension = entry.path.slice(entry.path.lastIndexOf('.') + 1);
-      const downloadUrl = build_download_url(entry.id, extension);
-      const filename = `${entry.make}_${entry.model}_${entry.year}_${entry.powertrain}_${entry.variant}_r${entry.revision}.${extension}`;
-      row.innerHTML = `
+    function renderResults(results) {
+      resultsBody.replaceChildren();
+      for (const entry of results) {
+        const row = document.createElement('tr');
+        const extension = entry.path.slice(entry.path.lastIndexOf('.') + 1);
+        const downloadUrl = build_download_url(entry.id, extension);
+        const filename = `${entry.make}_${entry.model}_${entry.year}_${entry.powertrain}_${entry.variant}_r${entry.revision}.${extension}`;
+        row.innerHTML = `
         <td>${entry.make}</td>
         <td>${entry.model}</td>
         <td>${entry.year}</td>
@@ -157,54 +187,55 @@
         <td>r${entry.revision}</td>
         <td><a class="download" href="${downloadUrl}" data-filename="${filename}">Download</a></td>
       `;
-      resultsBody.appendChild(row);
+        resultsBody.appendChild(row);
+      }
+      statusEl.textContent = `${results.length} of ${entries.length} vehicles`;
     }
-    statusEl.textContent = `${results.length} of ${entries.length} vehicles`;
-  }
 
-  function runSearch() {
-    const results = search_entries(JSON.stringify(entries), JSON.stringify(currentQuery()));
-    renderResults(results);
-  }
+    function runSearch() {
+      const results = search_entries(JSON.stringify(entries), JSON.stringify(currentQuery()));
+      renderResults(results);
+    }
 
-  form.addEventListener('input', runSearch);
+    form.addEventListener('input', runSearch);
 
-  // Cross-origin URLs ignore the `download` attribute (the browser just
-  // navigates instead), and navigating the embedding iframe to
-  // raw.githubusercontent.com hits its anti-framing header and fails
-  // outright. Fetch the file and save it from a same-origin blob: URL
-  // instead, which sidesteps both problems.
-  resultsBody.addEventListener('click', async (event) => {
-    const link = event.target.closest('a.download');
-    if (!link) return;
-    event.preventDefault();
+    // Cross-origin URLs ignore the `download` attribute (the browser just
+    // navigates instead), and navigating the embedding iframe to
+    // raw.githubusercontent.com hits its anti-framing header and fails
+    // outright. Fetch the file and save it from a same-origin blob: URL
+    // instead, which sidesteps both problems.
+    resultsBody.addEventListener('click', async (event) => {
+      const link = event.target.closest('a.download');
+      if (!link) return;
+      event.preventDefault();
+      try {
+        const response = await fetch(link.href);
+        if (!response.ok) throw new Error(`fetch failed: ${response.status}`);
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
+        const tempLink = document.createElement('a');
+        tempLink.href = blobUrl;
+        tempLink.download = link.dataset.filename;
+        tempLink.click();
+        URL.revokeObjectURL(blobUrl);
+      } catch (err) {
+        console.error(err);
+        window.open(link.href, '_blank', 'noopener');
+      }
+    });
+
     try {
-      const response = await fetch(link.href);
+      await init();
+      const response = await fetch(VEHICLES_JSONL_URL);
       if (!response.ok) throw new Error(`fetch failed: ${response.status}`);
-      const blob = await response.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const tempLink = document.createElement('a');
-      tempLink.href = blobUrl;
-      tempLink.download = link.dataset.filename;
-      tempLink.click();
-      URL.revokeObjectURL(blobUrl);
+      const text = await response.text();
+      entries = parse_vehicles_jsonl(text);
+      runSearch();
     } catch (err) {
+      statusEl.textContent = `Failed to load vehicle index: ${err.message}`;
       console.error(err);
-      window.open(link.href, '_blank', 'noopener');
     }
-  });
-
-  try {
-    await init();
-    const response = await fetch(VEHICLES_JSONL_URL);
-    if (!response.ok) throw new Error(`fetch failed: ${response.status}`);
-    const text = await response.text();
-    entries = parse_vehicles_jsonl(text);
-    runSearch();
-  } catch (err) {
-    statusEl.textContent = `Failed to load vehicle index: ${err.message}`;
-    console.error(err);
-  }
-</script>
+  </script>
 </body>
+
 </html>
