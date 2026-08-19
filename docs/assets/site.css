@@ -13,8 +13,8 @@ img[src*="edit-nlr-logo"] {
    100% width/height), so neither the aspect ratio nor the margin can be set
    via the iframe's `style` attribute in the source Markdown - both have to be
    overridden here on the wrapper div instead. */
-div:has(> iframe[src="/search.html"]) {
-  height: 80vh !important;
+div:has(> iframe[src="search.html"]) {
+  height: 75vh !important;
   padding-bottom: 0 !important;
   margin-bottom: 3rem;
 }
