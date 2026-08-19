@@ -11,4 +11,4 @@ load vehicles programmatically with `Vehicle.from_db`.
 
 Filter the vehicle database and download individual vehicle files.
 
-<iframe src="/search.html" title="Vehicle search" style="width: 100%; border: none;"></iframe>
+<iframe src="search.html" title="Vehicle search" style="width: 100%; border: none;"></iframe>
