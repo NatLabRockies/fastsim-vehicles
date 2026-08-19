@@ -145,8 +145,9 @@
     resultsBody.replaceChildren();
     for (const entry of results) {
       const row = document.createElement('tr');
-      const downloadUrl = build_download_url(entry.id, 'yaml');
-      const filename = `${entry.make}_${entry.model}_${entry.year}_${entry.powertrain}_${entry.variant}_r${entry.revision}.yaml`;
+      const extension = entry.path.slice(entry.path.lastIndexOf('.') + 1);
+      const downloadUrl = build_download_url(entry.id, extension);
+      const filename = `${entry.make}_${entry.model}_${entry.year}_${entry.powertrain}_${entry.variant}_r${entry.revision}.${extension}`;
       row.innerHTML = `
         <td>${entry.make}</td>
         <td>${entry.model}</td>
