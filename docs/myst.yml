@@ -8,6 +8,8 @@ project:
     - static/search.html
   toc:
     - file: content/intro.md
+    - file: content/about.md
+      title: About
     - url: https://github.com/NatLabRockies/fastsim
       title: FASTSim GitHub Repository
     - url: https://natlabrockies.github.io/fastsim/
@@ -18,3 +20,6 @@ site:
     logo: assets/edit-nlr-logo-color-horizontal-png-v2.png
     favicon: assets/nlr.ico
     style: assets/site.css
+  parts:
+    primary_sidebar_footer: |
+      [fastsim-vehicles on GitHub](https://github.com/NatLabRockies/fastsim-vehicles)

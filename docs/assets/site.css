@@ -14,7 +14,6 @@ img[src*="edit-nlr-logo"] {
    via the iframe's `style` attribute in the source Markdown - both have to be
    overridden here on the wrapper div instead. */
 div:has(> iframe[src="search.html"]) {
-  height: 75vh !important;
+  height: 65vh !important;
   padding-bottom: 0 !important;
-  margin-bottom: 3rem;
 }

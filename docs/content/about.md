@@ -1,7 +1,8 @@
-# FASTSim Vehicle Database
+# About the FASTSim Vehicle Database
+
 This repository houses the publicly available collection of vehicle models for NLR's FASTSim on-road vehicle powertrain simulation software. Additional information on FASTSim can be found at the [FASTSim GitHub repository](https://github.com/NatLabRockies/fastsim), the [FASTSim documentation site](https://natlabrockies.github.io/fastsim/), or on the [NLR.gov FASTSim homepage](https://www.nlr.gov/transportation/fastsim).
 
-## Database Organizational Schema (v1)
+# Database Organizational Schema (v1)
 
 | Level | Description | Example |
 | --- | --- | --- |
@@ -18,7 +19,7 @@ Example full filepath:
 
 `v1/fastsim-3/conv/ford/fusion/2012/base/r1.yaml`
 
-## Loading from this Database
+# Loading from this Database
 
 FASTSim provides the `Vehicle.from_db` method that loads from this database by default
 (requires internet access):
@@ -47,3 +48,19 @@ fastsim.Vehicle.from_db(
 ```
 
 For more information on `Vehicle.from_db` and how to load from alternate databases, see the Python docstring or the [relevant page of the FASTSim documentation](https://natlabrockies.github.io/fastsim/vehicle-databases).
+
+# Developers
+
+## Rebuilding the `vehicles.jsonl` index
+
+Install the index builder binary:
+
+```bash
+cargo install fastsim-schema --features cli --bin build-index
+```
+
+Run:
+
+```bash
+build-index .
+```
