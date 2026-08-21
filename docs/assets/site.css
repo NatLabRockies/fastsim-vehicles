@@ -28,7 +28,3 @@ body.search-maximized div:has(> iframe[src="search.html"]) {
   height: auto !important;
   z-index: 9999;
 }
-
-body.search-maximized {
-  overflow: hidden;
-}
