@@ -17,3 +17,15 @@ div:has(> iframe[src="search.html"]) {
   height: 65vh !important;
   padding-bottom: 0 !important;
 }
+
+/* Toggled by the search widget's maximize button via same-origin parent access. */
+body.search-maximized div:has(> iframe[src="search.html"]) {
+  position: fixed !important;
+  inset: 0 !important;
+  height: auto !important;
+  z-index: 9999;
+}
+
+body.search-maximized {
+  overflow: hidden;
+}

@@ -151,7 +151,7 @@
       <select id="powertrain">
         <option value="">Any</option>
         <option value="conv">Conventional (conv)</option>
-        <option value="hev">Hybrid-Electric (hev)</option>
+        <option value="hev">Hybrid Electric (hev)</option>
         <option value="phev">Plug-in Hybrid (phev)</option>
         <option value="bev">Battery Electric (bev)</option>
         <!-- <option value="fcev">Fuel Cell Electric (fcev)</option> -->
@@ -200,9 +200,9 @@
     const form = document.getElementById('query-form');
     const fields = ['fastsim_version', 'powertrain', 'make', 'model', 'year', 'variant'];
 
-    // Lets the widget take over the full screen instead of just its 65vh
-    // iframe slot on the page. Feature-detected so the button stays hidden
-    // on browsers without the Fullscreen API (e.g. older Safari on iOS).
+    // Expands the widget's wrapper div (in the embedding page) to cover the
+    // full page instead of just its 65vh iframe slot, via same-origin
+    // parent access.
     const maximizeBtn = document.getElementById('maximize');
     const maximizeIcon = maximizeBtn.querySelector('svg');
     const MAXIMIZE_PATHS = maximizeIcon.innerHTML;
@@ -212,27 +212,22 @@
       <path d="M3 16h3a2 2 0 0 1 2 2v3" />
       <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
     `;
-    const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
-    const requestFullscreen = (el) => (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
-    const exitFullscreen = () => (document.exitFullscreen || document.webkitExitFullscreen).call(document);
 
-    if (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen) {
+    function setMaximized(isMaximized) {
+      window.parent.document.body.classList.toggle('search-maximized', isMaximized);
+      maximizeIcon.innerHTML = isMaximized ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
+      maximizeBtn.title = isMaximized ? 'Restore' : 'Maximize';
+      maximizeBtn.setAttribute('aria-label', maximizeBtn.title);
+    }
+
+    if (window.parent !== window) {
       maximizeBtn.hidden = false;
       maximizeBtn.addEventListener('click', () => {
-        if (fullscreenElement()) {
-          exitFullscreen();
-        } else {
-          requestFullscreen(document.documentElement);
-        }
+        setMaximized(!window.parent.document.body.classList.contains('search-maximized'));
       });
-      const onFullscreenChange = () => {
-        const isFullscreen = !!fullscreenElement();
-        maximizeIcon.innerHTML = isFullscreen ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
-        maximizeBtn.title = isFullscreen ? 'Restore' : 'Maximize';
-        maximizeBtn.setAttribute('aria-label', maximizeBtn.title);
-      };
-      document.addEventListener('fullscreenchange', onFullscreenChange);
-      document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setMaximized(false);
+      });
     }
 
     let entries = [];
