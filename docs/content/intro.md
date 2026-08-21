@@ -10,4 +10,4 @@ for how to load vehicles from Python with `Vehicle.from_db`.
 
 # Search
 
-<iframe src="search.html" title="Vehicle search" style="width: 100%; border: none;"></iframe>
+<iframe src="search.html" title="Vehicle search" allow="fullscreen" style="width: 100%; border: none;"></iframe>

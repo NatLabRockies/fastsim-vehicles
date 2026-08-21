@@ -80,6 +80,15 @@
       font-weight: 600;
     }
 
+    th[data-field] {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    th[data-field]:hover {
+      color: var(--fg);
+    }
+
     a.download {
       color: var(--accent);
       text-decoration: none;
@@ -95,6 +104,29 @@
       margin-bottom: 0.75rem;
     }
 
+    #maximize {
+      position: fixed;
+      top: 0.5rem;
+      right: 0.5rem;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--bg);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    #maximize:hover {
+      color: var(--fg);
+      border-color: var(--accent);
+    }
+
     #results-wrap {
       overflow-x: auto;
     }
@@ -102,6 +134,15 @@
 </head>
 
 <body>
+  <button id="maximize" type="button" title="Maximize" aria-label="Maximize" hidden>
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+      <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+      <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+    </svg>
+  </button>
   <form id="query-form">
     <label>FASTSim version
       <input type="number" id="fastsim_version" min="2" max="3" value="3" />
@@ -109,24 +150,24 @@
     <label>Powertrain
       <select id="powertrain">
         <option value="">Any</option>
-        <option value="conv">conv</option>
-        <option value="hev">hev</option>
-        <option value="phev">phev</option>
-        <option value="bev">bev</option>
-        <option value="fcev">fcev</option>
+        <option value="conv">Conventional (conv)</option>
+        <option value="hev">Hybrid-Electric (hev)</option>
+        <option value="phev">Plug-in Hybrid (phev)</option>
+        <option value="bev">Battery Electric (bev)</option>
+        <!-- <option value="fcev">Fuel Cell Electric (fcev)</option> -->
       </select>
     </label>
     <label>Make
-      <input type="text" id="make" placeholder="e.g. ford" />
+      <input type="text" id="make" placeholder="e.g. ford (substring)" />
     </label>
     <label>Model
       <input type="text" id="model" placeholder="e.g. f-150 (substring)" />
     </label>
     <label>Year
-      <input type="text" id="year" placeholder="e.g. 2020" />
+      <input type="text" id="year" placeholder="e.g. 2020 (substring)" />
     </label>
     <label>Variant
-      <input type="text" id="variant" placeholder="e.g. base" />
+      <input type="text" id="variant" placeholder="e.g. base (substring)" />
     </label>
   </form>
 
@@ -135,12 +176,12 @@
     <table>
       <thead>
         <tr>
-          <th>Make</th>
-          <th>Model</th>
-          <th>Year</th>
-          <th>Powertrain</th>
-          <th>Variant</th>
-          <th>Rev.</th>
+          <th data-field="make">Make</th>
+          <th data-field="model">Model</th>
+          <th data-field="year">Year</th>
+          <th data-field="powertrain">Powertrain</th>
+          <th data-field="variant">Variant</th>
+          <th data-field="revision">Rev.</th>
           <th>Download</th>
         </tr>
       </thead>
@@ -159,7 +200,96 @@
     const form = document.getElementById('query-form');
     const fields = ['fastsim_version', 'powertrain', 'make', 'model', 'year', 'variant'];
 
+    // Lets the widget take over the full screen instead of just its 65vh
+    // iframe slot on the page. Feature-detected so the button stays hidden
+    // on browsers without the Fullscreen API (e.g. older Safari on iOS).
+    const maximizeBtn = document.getElementById('maximize');
+    const maximizeIcon = maximizeBtn.querySelector('svg');
+    const MAXIMIZE_PATHS = maximizeIcon.innerHTML;
+    const MINIMIZE_PATHS = `
+      <path d="M8 3v3a2 2 0 0 1-2 2H3" />
+      <path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+      <path d="M3 16h3a2 2 0 0 1 2 2v3" />
+      <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+    `;
+    const fullscreenElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+    const requestFullscreen = (el) => (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+    const exitFullscreen = () => (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+
+    if (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen) {
+      maximizeBtn.hidden = false;
+      maximizeBtn.addEventListener('click', () => {
+        if (fullscreenElement()) {
+          exitFullscreen();
+        } else {
+          requestFullscreen(document.documentElement);
+        }
+      });
+      const onFullscreenChange = () => {
+        const isFullscreen = !!fullscreenElement();
+        maximizeIcon.innerHTML = isFullscreen ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
+        maximizeBtn.title = isFullscreen ? 'Restore' : 'Maximize';
+        maximizeBtn.setAttribute('aria-label', maximizeBtn.title);
+      };
+      document.addEventListener('fullscreenchange', onFullscreenChange);
+      document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+    }
+
     let entries = [];
+    let lastResults = [];
+
+    // Make is already the dominant key in search_entries' default order, so
+    // selecting it here just marks the column in the UI without resorting.
+    const NUMERIC_FIELDS = new Set(['year', 'revision']);
+    const sortState = { field: 'make', dir: 'asc' };
+    const sortLabels = {
+      make: 'Make',
+      model: 'Model',
+      year: 'Year',
+      powertrain: 'Powertrain',
+      variant: 'Variant',
+      revision: 'Rev.',
+    };
+    const headerEls = {};
+    for (const th of document.querySelectorAll('th[data-field]')) {
+      headerEls[th.dataset.field] = th;
+      th.addEventListener('click', () => {
+        if (sortState.field === th.dataset.field) {
+          sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+        } else {
+          sortState.field = th.dataset.field;
+          sortState.dir = NUMERIC_FIELDS.has(th.dataset.field) ? 'desc' : 'asc';
+        }
+        updateHeaders();
+        render();
+      });
+    }
+
+    function updateHeaders() {
+      for (const [field, th] of Object.entries(headerEls)) {
+        const arrow = sortState.field !== field ? '' : sortState.dir === 'asc' ? ' ▲' : ' ▼';
+        th.textContent = sortLabels[field] + arrow;
+      }
+    }
+    updateHeaders();
+
+    function compareEntries(a, b, field) {
+      if (field === 'revision') return a.revision - b.revision;
+      if (field === 'year') {
+        const an = parseInt(a.year, 10);
+        const bn = parseInt(b.year, 10);
+        if (!Number.isNaN(an) && !Number.isNaN(bn)) return an - bn;
+      }
+      const av = String(a[field]).toLowerCase();
+      const bv = String(b[field]).toLowerCase();
+      return av < bv ? -1 : av > bv ? 1 : 0;
+    }
+
+    function applySort(results) {
+      if (!sortState.field) return results;
+      const dir = sortState.dir === 'desc' ? -1 : 1;
+      return results.slice().sort((a, b) => dir * compareEntries(a, b, sortState.field));
+    }
 
     function currentQuery() {
       const query = {};
@@ -192,9 +322,13 @@
       statusEl.textContent = `${results.length} of ${entries.length} vehicles`;
     }
 
+    function render() {
+      renderResults(applySort(lastResults));
+    }
+
     function runSearch() {
-      const results = search_entries(JSON.stringify(entries), JSON.stringify(currentQuery()));
-      renderResults(results);
+      lastResults = search_entries(JSON.stringify(entries), JSON.stringify(currentQuery()));
+      render();
     }
 
     form.addEventListener('input', runSearch);

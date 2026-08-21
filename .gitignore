@@ -9,3 +9,6 @@ scripts/
 
 # mystmd build output
 docs/_build
+
+# scratch clone used by the build-wasm pixi task
+.wasm-src

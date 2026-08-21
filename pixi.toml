@@ -8,10 +8,31 @@ version = "0.1.0"
 [dependencies]
 nodejs = "26.4.*"
 python = ">=3.10,<3.16"
+rust = ">=1.83"
+rust-std-wasm32-unknown-unknown = "*"
+wasm-pack = "*"
 
 [pypi-dependencies]
 jupyter-book = ">=2.0.0"
 
 [tasks]
+# Run the docs server (for development)
 docs = { cmd = "jupyter book start", cwd = "docs" }
+
+# Build the docs
 build-docs = { cmd = "jupyter book build --strict --html", cwd = "docs" }
+
+# Build the wasm package, assuming FASTSim repo is cloned at (../fastsim)
+build-wasm = { cmd = """
+wasm-pack build ../fastsim/fastsim-schema --target web --release --out-dir ../../fastsim-vehicles/docs/static/pkg --out-name fastsim_schema -- --features wasm &&
+rm -f docs/static/pkg/.gitignore docs/static/pkg/README.md
+""" }
+
+# Clone the FASTSim repo and build the wasm package from it
+build-wasm-repo = { cmd = """
+rm -rf .wasm-src &&
+git clone --depth 1 --branch fastsim-3 https://github.com/NatLabRockies/fastsim.git .wasm-src &&
+wasm-pack build .wasm-src/fastsim-schema --target web --release --out-dir ../../docs/static/pkg --out-name fastsim_schema -- --features wasm &&
+rm -f docs/static/pkg/.gitignore docs/static/pkg/README.md &&
+rm -rf .wasm-src
+""" }
