@@ -158,16 +158,16 @@
       </select>
     </label>
     <label>Make
-      <input type="text" id="make" placeholder="e.g. ford (substring)" />
+      <input type="text" id="make" placeholder="e.g. &quot;ford&quot;" />
     </label>
     <label>Model
-      <input type="text" id="model" placeholder="e.g. f-150 (substring)" />
+      <input type="text" id="model" placeholder="e.g. &quot;f-150&quot;" />
     </label>
     <label>Year
-      <input type="text" id="year" placeholder="e.g. 2020 (substring)" />
+      <input type="text" id="year" placeholder="e.g. &quot;2020&quot;" />
     </label>
     <label>Variant
-      <input type="text" id="variant" placeholder="e.g. base (substring)" />
+      <input type="text" id="variant" placeholder="e.g. &quot;base&quot;" />
     </label>
   </form>
 
@@ -200,9 +200,12 @@
     const form = document.getElementById('query-form');
     const fields = ['fastsim_version', 'powertrain', 'make', 'model', 'year', 'variant'];
 
-    // Expands the widget's wrapper div (in the embedding page) to cover the
-    // full page instead of just its 65vh iframe slot, via same-origin
-    // parent access.
+    // Expands the widget's wrapper div (in the embedding page) to reach the
+    // top of the page vertically, keeping its current width and horizontal
+    // position, via same-origin parent access. The wrapper's width is set
+    // via a percentage that would otherwise resolve against the viewport
+    // once it goes position:fixed, so the pre-maximize pixel width and
+    // offset are captured and pinned explicitly.
     const maximizeBtn = document.getElementById('maximize');
     const maximizeIcon = maximizeBtn.querySelector('svg');
     const MAXIMIZE_PATHS = maximizeIcon.innerHTML;
@@ -214,7 +217,17 @@
     `;
 
     function setMaximized(isMaximized) {
+      const wrapper = window.frameElement.parentElement;
+      if (isMaximized) {
+        const rect = wrapper.getBoundingClientRect();
+        wrapper.style.left = `${rect.left}px`;
+        wrapper.style.width = `${rect.width}px`;
+      }
       window.parent.document.body.classList.toggle('search-maximized', isMaximized);
+      if (!isMaximized) {
+        wrapper.style.left = '';
+        wrapper.style.width = '';
+      }
       maximizeIcon.innerHTML = isMaximized ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
       maximizeBtn.title = isMaximized ? 'Restore' : 'Maximize';
       maximizeBtn.setAttribute('aria-label', maximizeBtn.title);
