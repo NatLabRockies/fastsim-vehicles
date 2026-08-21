@@ -216,17 +216,19 @@
       <path d="M16 21v-3a2 2 0 0 1 2-2h3" />
     `;
 
+    let wrapperOriginalStyle = null;
+
     function setMaximized(isMaximized) {
       const wrapper = window.frameElement.parentElement;
       if (isMaximized) {
+        wrapperOriginalStyle = wrapper.getAttribute('style');
         const rect = wrapper.getBoundingClientRect();
         wrapper.style.left = `${rect.left}px`;
         wrapper.style.width = `${rect.width}px`;
       }
       window.parent.document.body.classList.toggle('search-maximized', isMaximized);
-      if (!isMaximized) {
-        wrapper.style.left = '';
-        wrapper.style.width = '';
+      if (!isMaximized && wrapperOriginalStyle !== null) {
+        wrapper.setAttribute('style', wrapperOriginalStyle);
       }
       maximizeIcon.innerHTML = isMaximized ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
       maximizeBtn.title = isMaximized ? 'Restore' : 'Maximize';
