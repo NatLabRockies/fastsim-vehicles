@@ -22,4 +22,4 @@ site:
     style: assets/site.css
   parts:
     primary_sidebar_footer: |
-      [fastsim-vehicles on GitHub](https://github.com/NatLabRockies/fastsim-vehicles)
+      [`fastsim-vehicles` on GitHub](https://github.com/NatLabRockies/fastsim-vehicles)
