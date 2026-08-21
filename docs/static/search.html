@@ -104,7 +104,7 @@
       margin-bottom: 0.75rem;
     }
 
-    #maximize {
+    #expand {
       position: fixed;
       top: 0.5rem;
       right: 0.5rem;
@@ -122,7 +122,7 @@
       cursor: pointer;
     }
 
-    #maximize:hover {
+    #expand:hover {
       color: var(--fg);
       border-color: var(--accent);
     }
@@ -134,7 +134,7 @@
 </head>
 
 <body>
-  <button id="maximize" type="button" title="Maximize" aria-label="Maximize" hidden>
+  <button id="expand" type="button" title="Expand" aria-label="Expand" hidden>
     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M7 9l5-5 5 5" />
@@ -202,42 +202,42 @@
     // top of the page vertically, keeping its current width and horizontal
     // position, via same-origin parent access. The wrapper's width is set
     // via a percentage that would otherwise resolve against the viewport
-    // once it goes position:fixed, so the pre-maximize pixel width and
+    // once it goes position:fixed, so the pre-expand pixel width and
     // offset are captured and pinned explicitly.
-    const maximizeBtn = document.getElementById('maximize');
-    const maximizeIcon = maximizeBtn.querySelector('svg');
-    const MAXIMIZE_PATHS = maximizeIcon.innerHTML;
-    const MINIMIZE_PATHS = `
-      <path d="M7 8l5 5 5-5" />
-      <path d="M7 16l5-5 5 5" />
+    const expandBtn = document.getElementById('expand');
+    const expandIcon = expandBtn.querySelector('svg');
+    const EXPAND_PATHS = expandIcon.innerHTML;
+    const COLLAPSE_PATHS = `
+      <path d="M7 4l5 5 5-5" />
+      <path d="M7 20l5-5 5 5" />
     `;
 
     let wrapperOriginalStyle = null;
 
-    function setMaximized(isMaximized) {
+    function setExpanded(isExpanded) {
       const wrapper = window.frameElement.parentElement;
-      if (isMaximized) {
+      if (isExpanded) {
         wrapperOriginalStyle = wrapper.getAttribute('style');
         const rect = wrapper.getBoundingClientRect();
         wrapper.style.left = `${rect.left}px`;
         wrapper.style.width = `${rect.width}px`;
       }
-      window.parent.document.body.classList.toggle('search-maximized', isMaximized);
-      if (!isMaximized && wrapperOriginalStyle !== null) {
+      window.parent.document.body.classList.toggle('search-expanded', isExpanded);
+      if (!isExpanded && wrapperOriginalStyle !== null) {
         wrapper.setAttribute('style', wrapperOriginalStyle);
       }
-      maximizeIcon.innerHTML = isMaximized ? MINIMIZE_PATHS : MAXIMIZE_PATHS;
-      maximizeBtn.title = isMaximized ? 'Restore' : 'Maximize';
-      maximizeBtn.setAttribute('aria-label', maximizeBtn.title);
+      expandIcon.innerHTML = isExpanded ? COLLAPSE_PATHS : EXPAND_PATHS;
+      expandBtn.title = isExpanded ? 'Collapse' : 'Expand';
+      expandBtn.setAttribute('aria-label', expandBtn.title);
     }
 
     if (window.parent !== window) {
-      maximizeBtn.hidden = false;
-      maximizeBtn.addEventListener('click', () => {
-        setMaximized(!window.parent.document.body.classList.contains('search-maximized'));
+      expandBtn.hidden = false;
+      expandBtn.addEventListener('click', () => {
+        setExpanded(!window.parent.document.body.classList.contains('search-expanded'));
       });
       document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') setMaximized(false);
+        if (event.key === 'Escape') setExpanded(false);
       });
     }
 

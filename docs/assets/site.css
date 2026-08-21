@@ -18,10 +18,10 @@ div:has(> iframe[src="search.html"]) {
   padding-bottom: 0 !important;
 }
 
-/* Toggled by the search widget's maximize button via same-origin parent
+/* Toggled by the search widget's expand button via same-origin parent
    access. left/width are pinned inline by that script, not set here, since
-   they need to stay at their pre-maximize pixel values. */
-body.search-maximized div:has(> iframe[src="search.html"]) {
+   they need to stay at their pre-expand pixel values. */
+body.search-expanded div:has(> iframe[src="search.html"]) {
   position: fixed !important;
   top: 0 !important;
   bottom: 0 !important;
